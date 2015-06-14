@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cruise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="cruise-config.xsd" schemaVersion="75">
+  <server artifactsdir="artifacts" commandRepositoryLocation="default" serverId="6bcbcf9e-f2a5-41dd-a4b6-c0b51ec05f52" />
+  <pipelines group="Joke">
+    <pipeline name="Build_Joke_Service" isLocked="false">
+      <materials>
+        <git url="https://github.com/migibert-demo/joke-service.git" />
+      </materials>
+      <stage name="CommitStage">
+        <jobs>
+          <job name="Test">
+            <tasks>
+              <exec command="mvn">
+                <arg>clean</arg>
+                <arg>test</arg>
+              </exec>
+            </tasks>
+          </job>
+          <job name="Package">
+            <tasks>
+              <exec command="mvn">
+                <arg>clean</arg>
+                <arg>package</arg>
+                <runif status="passed" />
+              </exec>
+            </tasks>
+            <artifacts>
+              <artifact src="target/*.jar" />
+            </artifacts>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>
+  <environments>
+    <environment name="integration" />
+  </environments>
+  <agents>
+    <agent hostname="gocd-slave-1" ipaddress="172.17.42.1" uuid="31139d76-528b-4f45-85b1-2861027cf63a" />
+    <agent hostname="gocd-slave-2" ipaddress="172.17.42.1" uuid="078f334d-c8ad-400a-a232-87997224e51a" />
+    <agent hostname="gocd-slave-3" ipaddress="172.17.42.1" uuid="c512ef95-ed92-462d-89e7-feeed9df9cfc" />
+  </agents>
+</cruise>
+
